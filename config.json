@@ -1,23 +1,25 @@
 {
   "channel": {
-    "name": "My AI YouTube Studio",
+    "name": "Impossible Reality",
     "language": "en",
-    "region": "IN"
+    "format": "long_form_plus_shorts",
+    "target_duration_minutes": "8-12",
+    "uploads_per_week": 3
   },
-  "research": {
-    "topics": [
-      "ASMR mukbang",
-      "Korean food ASMR",
-      "Japanese food ASMR",
-      "Indian street food ASMR",
-      "spicy food",
-      "giant food",
-      "dessert ASMR",
-      "cooking ASMR",
-      "luxury food",
-      "unusual food",
-      "relaxing ASMR",
-      "food sounds"
-    ]
-  }
+  "content": {
+    "genre": ["mystery", "science", "sci-fi", "psychological suspense"],
+    "audience": "worldwide English-speaking",
+    "principle": "Original impossible phenomena that feel believable, cinematic and unpredictable."
+  },
+  "providers": {
+    "image": ["provider_1", "provider_2", "provider_3"],
+    "video": ["provider_1", "provider_2"],
+    "voice": ["provider_1", "provider_2"]
+  },
+  "notes": [
+    "Keep secrets in environment variables or GitHub Actions secrets.",
+    "Never commit API keys.",
+    "Fallbacks must respect provider quotas and terms.",
+    "Human review is required before publishing."
+  ]
 }
