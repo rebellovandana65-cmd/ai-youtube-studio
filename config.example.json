@@ -1,0 +1,5 @@
+{
+  "channel": {"name":"Impossible Reality","language":"en","format":"long_form_plus_shorts","target_duration_minutes":"8-12"},
+  "providers": {"image":["provider_1","provider_2","provider_3"],"video":["provider_1","provider_2"],"voice":["provider_1","provider_2"]},
+  "notes":["Store secrets in environment variables or GitHub Actions secrets.","Never commit API keys.","Fallbacks must respect provider quotas and terms."]
+}
