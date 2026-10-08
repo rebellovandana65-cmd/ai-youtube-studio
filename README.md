@@ -1,28 +1,28 @@
-# Impossible Reality — AI YouTube Studio
+# AI YouTube Studio
 
-A mobile-friendly production engine for the **Impossible Reality** YouTube channel.
+Phone-first automation engine for an English curiosity/documentary YouTube channel.
 
-## Goal
-Turn one unusual video idea into a complete production blueprint:
-- clickable titles and thumbnail concepts
-- 8–12 minute story structure
-- scene-by-scene narration and visual prompts
-- editing and sound-design plan
-- five Shorts derived from the long-form story
-- provider-agnostic image/video/voice routing
+## What it does
+- turns a story idea into an 8–12 minute production blueprint
+- creates title and thumbnail directions
+- creates scene-by-scene narration and visual goals
+- creates 5–8 Short concepts designed to point viewers to the long video
+- validates the package before use
+- runs in GitHub Actions, so the phone does not need to run the Python pipeline
 
-## API
-Run:
-`pip install -r requirements.txt`
-`uvicorn app:app --reload`
+## Channel direction
+Original, research-backed curiosity documentaries covering unusual business stories, technology, internet phenomena, consumer behavior, inventions, industries and real-world events.
 
-Then open `/docs`.
+The core formula is: strong question + evidence + escalation + explanation + payoff.
 
-Generate with `POST /api/generate`:
-`{"idea":"A photograph from tomorrow appeared on every phone."}`
+## GitHub Actions
+The AI YouTube Studio workflow can be started manually with a story idea or run on a schedule. It produces a production-package artifact.
 
-## Provider model
-The project supports multiple configured providers in priority order. It does **not** bypass quotas, paywalls, CAPTCHAs, or provider terms. Actual media generation requires legitimate provider APIs and credentials.
+This is the automation/control layer, not an unlimited-video service. Actual third-party media and publishing APIs require legitimate credentials and quotas.
 
-## Publishing quality
-Every episode should be genuinely different, original, and human-reviewed. Avoid copied footage, copyrighted clips, unsupported claims presented as fact, and repetitive mass-produced slideshows.
+## Quality rules
+- verify factual claims
+- do not invent evidence, quotes, experts or statistics
+- use original or properly licensed assets
+- avoid repetitive AI slideshow templates
+- human review before publishing
