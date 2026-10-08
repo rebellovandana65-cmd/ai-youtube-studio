@@ -1,25 +1,6 @@
 {
-  "channel": {
-    "name": "Impossible Reality",
-    "language": "en",
-    "format": "long_form_plus_shorts",
-    "target_duration_minutes": "8-12",
-    "uploads_per_week": 3
-  },
-  "content": {
-    "genre": ["mystery", "science", "sci-fi", "psychological suspense"],
-    "audience": "worldwide English-speaking",
-    "principle": "Original impossible phenomena that feel believable, cinematic and unpredictable."
-  },
-  "providers": {
-    "image": ["provider_1", "provider_2", "provider_3"],
-    "video": ["provider_1", "provider_2"],
-    "voice": ["provider_1", "provider_2"]
-  },
-  "notes": [
-    "Keep secrets in environment variables or GitHub Actions secrets.",
-    "Never commit API keys.",
-    "Fallbacks must respect provider quotas and terms.",
-    "Human review is required before publishing."
-  ]
+  "channel": {"name":"Curiosity Files","language":"en","format":"long_form_plus_shorts","target_duration_minutes":"8-12","shorts_per_long_form":"5-8","uploads_per_week":2},
+  "content": {"genre":["business mysteries","technology stories","internet phenomena","strange products","consumer psychology","unexpected inventions","hidden industries","AI stories","real-world mysteries"],"audience":"worldwide English-speaking","principle":"Every episode needs a specific curiosity question, original narrative angle, verified evidence and a satisfying payoff."},
+  "topic_scoring":{"demand":0.18,"growth":0.17,"curiosity":0.22,"competition":0.10,"visuals":0.12,"depth":0.13,"monetization":0.08},
+  "notes":["Keep secrets in GitHub Actions secrets.","Never commit API keys.","Provider fallbacks must respect quotas and terms.","Human review is required before publishing."]
 }
