@@ -1,4 +1,7 @@
-from .models import GenerateRequest,ProductionPackage,Scene
+try:
+    from .models import GenerateRequest, ProductionPackage, Scene
+except ImportError:  # Support running pytest from the repository root.
+    from models import GenerateRequest, ProductionPackage, Scene
 
 def build_package(req:GenerateRequest)->ProductionPackage:
     idea=req.idea.strip().rstrip('.!?').capitalize()
