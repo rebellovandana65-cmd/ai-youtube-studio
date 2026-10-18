@@ -11,6 +11,14 @@ This is an experimental, free/open-source editing MVP intended for short educati
 - Suggest title ideas, thumbnail text, and editing notes from the transcript
 - Export the edited MP4 and SRT file
 
+## Deploy from Android (free tier; resource-limited)
+1. Open [Streamlit Community Cloud](https://share.streamlit.io/) and sign in with the GitHub account that owns this repository.
+2. Choose **Create app** and select repository `rebellovandana65-cmd/ai-youtube-studio`, branch `main`.
+3. Set **Main file path** to `tradecut/app.py` and deploy.
+4. Test with a small, non-sensitive 20–30 second clip first. If it fails during dependency installation or processing, check the app logs; free hosting may not have enough memory for transcription or larger files.
+
+Keep the repository private if you don't want the source code public. Treat uploaded trading recordings as sensitive. Don't upload credentials or account identifiers.
+
 ## Run locally
 1. Install Python 3.11 or newer.
 2. In this folder run: `pip install -r requirements.txt`
