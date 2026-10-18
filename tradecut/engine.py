@@ -113,11 +113,12 @@ def edit_video(input_path: str, output_path: str, music_path: str | None = None,
              "-c", "copy", str(joined)])
 
         if music_path:
-            # Quiet, non-intrusive music under speech; keep speech as the primary signal.
+            # Quiet, non-intrusive music under speech; fade music out near the end.
+            joined_duration = duration_seconds(str(joined))
+            fade_start = max(0.0, joined_duration - 2.0)
             audio_filter = (
-                "[0:a]volume=1.0,alimiter=limit=0.95[voice];"
-                "[1:a]volume=0.075,afade=t=in:st=0:d=1.5,"
-                "afade=t=out:st=0:d=2[music];"
+                "[0:a]loudnorm=I=-16:TP=-1.5:LRA=11,alimiter=limit=0.95[voice];"
+                f"[1:a]volume=0.075,afade=t=in:st=0:d=1.5,afade=t=out:st={fade_start:.3f}:d=2[music];"
                 "[voice][music]amix=inputs=2:duration=first:dropout_transition=2[outa]"
             )
             run([ffmpeg_path(), "-y", "-i", str(joined), "-stream_loop", "-1",
