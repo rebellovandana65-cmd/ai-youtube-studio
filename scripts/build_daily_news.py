@@ -31,7 +31,7 @@ FEEDS = {
 
 def clean(s):
     s = html.unescape(re.sub(r"<[^>]+>", " ", s or ""))
-    return re.sub(r"\\s+", " ", s).strip()
+    return re.sub(r"\s+", " ", s).strip()
 
 def fetch_feed(url, region):
     try:
@@ -147,11 +147,11 @@ def render(region, items, date):
         run(["ffmpeg","-y","-loop","1","-i",str(img),"-i",str(wav),"-vf","scale=1920:1080,zoompan=z='min(zoom+0.0005,1.04)':d=1:s=1920x1080:fps=24,format=yuv420p","-af","apad","-t",f"{segdur:.3f}","-r","24","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","160k","-shortest",str(seg)])
         concat.append(seg)
     listfile=work/"concat.txt"
-    listfile.write_text("".join(f"file '{p.resolve()}'\\n" for p in concat))
+    listfile.write_text("".join(f"file '{p.resolve()}'\n" for p in concat), encoding="utf-8")
     final=OUT/f"{region}-news-{date}.mp4"
     run(["ffmpeg","-y","-f","concat","-safe","0","-i",str(listfile),"-c","copy","-movflags","+faststart",str(final)])
     # Create complete source list and YouTube metadata.
-    (OUT/f"{region}-sources-{date}.txt").write_text("\\n".join(f"{x['title']}\\n{x['url']}\\n" for x in items))
+    (OUT/f"{region}-sources-{date}.txt").write_text("\n".join(f"{x['title']}\n{x['url']}\n" for x in items), encoding="utf-8")
     (OUT/f"{region}-description-{date}.txt").write_text(f"{region.title()} news briefing — {date}\\n\\nSources and original reporting:\\n"+"\\n".join(f"- {x['title']} — {x['url']}" for x in items)+"\\n\\nThis video summarizes publisher-provided RSS headlines and descriptions. Check original reports for updates.")
     actual=float(subprocess.check_output(["ffprobe","-v","error","-show_entries","format=duration","-of","default=nw=1:nk=1",str(final)],text=True).strip())
     if not 175<=actual<=185: raise RuntimeError(f"Final video duration {actual:.1f}s is outside 3-minute QC window.")
