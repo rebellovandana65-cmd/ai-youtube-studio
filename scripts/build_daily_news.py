@@ -152,7 +152,7 @@ def render(region, items, date):
     run(["ffmpeg","-y","-f","concat","-safe","0","-i",str(listfile),"-c","copy","-movflags","+faststart",str(final)])
     # Create complete source list and YouTube metadata.
     (OUT/f"{region}-sources-{date}.txt").write_text("\n".join(f"{x['title']}\n{x['url']}\n" for x in items), encoding="utf-8")
-    (OUT/f"{region}-description-{date}.txt").write_text(f"{region.title()} news briefing — {date}\\n\\nSources and original reporting:\\n"+"\\n".join(f"- {x['title']} — {x['url']}" for x in items)+"\\n\\nThis video summarizes publisher-provided RSS headlines and descriptions. Check original reports for updates.")
+    (OUT/f"{region}-description-{date}.txt").write_text(f"{region.title()} news briefing — {date}\n\nSources and original reporting:\n"+"\n".join(f"- {x['title']} — {x['url']}" for x in items)+"\n\nThis video summarizes publisher-provided RSS headlines and descriptions. Check original reports for updates.", encoding="utf-8")
     actual=float(subprocess.check_output(["ffprobe","-v","error","-show_entries","format=duration","-of","default=nw=1:nk=1",str(final)],text=True).strip())
     if not 175<=actual<=185: raise RuntimeError(f"Final video duration {actual:.1f}s is outside 3-minute QC window.")
     return str(final)
