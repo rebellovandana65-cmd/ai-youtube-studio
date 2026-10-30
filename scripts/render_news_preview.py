@@ -169,7 +169,7 @@ def main() -> None:
         "-filter_complex", f"[0:v]{vf}[vout];{filter_audio}",
         "-map", "[vout]", "-map", "[aout]",
         "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
-        "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "160k",
+        "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-ar", "48000",
         "-movflags", "+faststart", "-shortest", str(target),
     ])
     info = subprocess.run(
