@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       idea:
-        description: "Story idea"
+        description: "Story idea for the existing production package"
         required: true
-        default: "The strange business decision that nobody expected to work"
+        default: "A major news story that needs clear context and explanation"
       duration:
         description: "Long-form duration in minutes"
         required: true
@@ -14,8 +14,19 @@ on:
       shorts:
         description: "Number of Short concepts"
         required: true
-        default: "6"
+        default: "5"
+      sample_video:
+        description: "Render the visual/audio sample MP4"
+        required: true
+        type: boolean
+        default: true
+      send_preview_to_telegram:
+        description: "Send the sample MP4 to Telegram (requires repository secrets)"
+        required: true
+        type: boolean
+        default: true
   schedule:
+    # Preserve the existing schedule: Mon/Wed/Fri at 04:30 UTC (10:00 IST).
     - cron: "30 4 * * 1,3,5"
 
 permissions:
@@ -38,16 +49,40 @@ jobs:
           python - <<'PY'
           import os
           from studio import build_package, save_package
-          idea = os.getenv("IDEA") or "A strange story worth investigating"
+          idea = os.getenv("IDEA") or "A major news story that needs clear context"
           duration = int(os.getenv("DURATION") or "10")
-          shorts = int(os.getenv("SHORTS") or "6")
+          shorts = int(os.getenv("SHORTS") or "5")
           print(save_package(build_package(idea, duration, shorts)))
           PY
-      - name: Validate
+      - name: Validate production package
         run: |
           python -m compileall .
           test -f output/production_package.json
-      - uses: actions/upload-artifact@v4
+      - name: Install free rendering tools
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.sample_video }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg espeak-ng fonts-dejavu-core
+      - name: Render news-style sample MP4
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.sample_video }}
+        run: python scripts/render_news_preview.py
+      - name: Verify sample video
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.sample_video }}
+        run: |
+          test -s output/news-style-preview.mp4
+          ffprobe -v error -show_entries stream=codec_name,width,height -show_entries format=duration -of json output/news-style-preview.mp4
+      - name: Send sample video to Telegram
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.sample_video && inputs.send_preview_to_telegram }}
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python scripts/send_telegram_video.py output/news-style-preview.mp4
+      - name: Upload production package and sample video
+        uses: actions/upload-artifact@v4
         with:
-          name: production-package
-          path: output/production_package.json
+          name: news-studio-first-preview
+          path: |
+            output/production_package.json
+            output/news-style-preview.mp4
+          if-no-files-found: warn
+          retention-days: 7
