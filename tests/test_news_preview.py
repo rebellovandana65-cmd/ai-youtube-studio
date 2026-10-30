@@ -4,7 +4,7 @@ from scripts.render_news_preview import NARRATION, make_music
 
 
 def test_preview_narration_is_explicitly_a_design_preview():
-    assert "production preview" in NARRATION.lower()
+    assert "sample design preview" in NARRATION.lower()
     assert "not a real news bulletin" in NARRATION.lower()
 
 
