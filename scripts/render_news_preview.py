@@ -150,9 +150,9 @@ def main() -> None:
         f"drawtext=fontfile={FONT}:text='INDIA  •  WORLD  •  EXPLAINED':"
         "x=72:y=640:fontsize=25:fontcolor=white,"
         f"subtitles={captions.as_posix()}:force_style="
-        "'FontName=DejaVu Sans,FontSize=20,Bold=1,PrimaryColour=&H00FFFFFF,"
+        "'FontName=DejaVu Sans,FontSize=18,Bold=1,PrimaryColour=&H00FFFFFF,"
         "OutlineColour=&H00101010,BorderStyle=3,BackColour=&H9007111F,"
-        "Outline=1,Shadow=0,Alignment=8,MarginV=555',scale=1920:1080:flags=lanczos"
+        "Outline=1,Shadow=0,Alignment=8,MarginV=640',scale=1920:1080:flags=lanczos"
     )
     filter_audio = (
         "[1:a]asplit=2[voice_sc][voice_mix];"
