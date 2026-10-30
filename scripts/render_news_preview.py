@@ -16,12 +16,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "output"
 FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
-NARRATION = (
-    "This is a production preview for your news channel. "
-    "The upgraded style uses stronger headlines, animated visual panels, "
-    "clear subtitles, and background music that moves lower under the voice. "
-    "Every real news story must be checked against reliable sources before publication."
-)
+NARRATION_LINES = [
+    "This is a sample design preview, not a real news bulletin.",
+    "Clearer visuals. Stronger storytelling.",
+    "Subtitles that are easy to follow.",
+    "Background music ducks under the narration. Facts come first.",
+]
+NARRATION = " ".join(NARRATION_LINES)
 
 
 def run(command: list[str]) -> None:
@@ -65,27 +66,50 @@ def main() -> None:
     music = OUT / "original-ambient-bed.wav"
     captions = OUT / "preview-captions.srt"
 
-    run(["espeak-ng", "-v", "en-us", "-s", "148", "-w", str(voice), NARRATION])
-    # Leave enough visual tail for the final subtitle and music fade.
-    probe = subprocess.run(
-        ["ffprobe", "-v", "error", "-show_entries", "format=duration",
-         "-of", "default=noprint_wrappers=1:nokey=1", str(voice)],
-        check=True, capture_output=True, text=True)
-    duration = max(18.0, float(probe.stdout.strip()) + 1.0)
-    make_music(music, duration)
+    # Synthesize each caption line separately, then derive subtitle
+    # timestamps from each generated WAV segment.
+    segments = []
+    subtitle_rows = []
+    cursor = 0.0
+    sample_rate = 22050
+    for index, line in enumerate(NARRATION_LINES, start=1):
+        segment = OUT / f"preview-voice-{index}.wav"
+        run(["espeak-ng", "-v", "en-us", "-s", "148", "-w", str(segment), line])
+        with wave.open(str(segment), "rb") as part:
+            params = part.getparams()
+            sample_rate = params.framerate
+            frames = part.readframes(part.getnframes())
+        segment_duration = len(frames) / (params.nchannels * params.sampwidth * params.framerate)
+        start_time = cursor
+        end_time = cursor + segment_duration
+        subtitle_rows.append((start_time, end_time, line.upper()))
+        segments.append(frames)
+        cursor = end_time + 0.35
 
-    # Phrase-level captions: timed to the known preview narration, not ASR.
+    with wave.open(str(voice), "wb") as combined:
+        combined.setnchannels(1)
+        combined.setsampwidth(2)
+        combined.setframerate(sample_rate)
+        for frames in segments:
+            combined.writeframes(frames)
+            combined.writeframes(b"\x00\x00" * int(0.35 * sample_rate))
+
+    def stamp(seconds: float) -> str:
+        millis = int(seconds * 1000)
+        hours, millis = divmod(millis, 3_600_000)
+        minutes, millis = divmod(millis, 60_000)
+        secs, millis = divmod(millis, 1000)
+        return f"{hours:02}:{minutes:02}:{secs:02},{millis:03}"
+
     captions.write_text(
-        "1\n00:00:00,000 --> 00:00:05,000\n"
-        "A BETTER NEWS VIEWING EXPERIENCE\n\n"
-        "2\n00:00:05,000 --> 00:00:10,000\n"
-        "CLEARER VISUALS. STRONGER STORYTELLING.\n\n"
-        "3\n00:00:10,000 --> 00:00:15,000\n"
-        "SUBTITLES THAT ARE EASY TO FOLLOW.\n\n"
-        "4\n00:00:15,000 --> 00:00:25,000\n"
-        "MUSIC DUCKS UNDER THE NARRATION. FACTS STILL COME FIRST.\n",
+        "\n\n".join(
+            f"{i}\n{stamp(start_time)} --> {stamp(end_time)}\n{text}"
+            for i, (start_time, end_time, text) in enumerate(subtitle_rows, start=1)
+        ) + "\n",
         encoding="utf-8",
     )
+    duration = max(18.0, cursor + 2.0)
+    make_music(music, duration)
 
     # Motion is generated in FFmpeg: animated accent bar, changing story cards,
     # lower-third, ticker, and burn-in subtitles. No external media required.
