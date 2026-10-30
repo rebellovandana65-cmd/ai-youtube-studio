@@ -1,28 +1,49 @@
-# AI YouTube Studio
+# AI YouTube Studio — News Video Upgrade
 
-Phone-first automation engine for an English curiosity/documentary YouTube channel.
+This repository is being upgraded for an English-language news channel covering India and global stories.
 
-## What it does
-- turns a story idea into an 8–12 minute production blueprint
-- creates title and thumbnail directions
-- creates scene-by-scene narration and visual goals
-- creates 5–8 Short concepts designed to point viewers to the long video
-- validates the package before use
-- runs in GitHub Actions, so the phone does not need to run the Python pipeline
+## What this upgrade adds
 
-## Channel direction
-Original, research-backed curiosity documentaries covering unusual business stories, technology, internet phenomena, consumer behavior, inventions, industries and real-world events.
+- A reproducible FFmpeg news-style sample renderer.
+- Animated editorial graphics, a headline treatment, lower-third and ticker.
+- Burned-in, phrase-timed subtitles with high-contrast styling.
+- A newly synthesized, copyright-safe ambient music bed.
+- Voice/music sidechain ducking and final loudness normalization.
+- MP4 H.264/AAC export at 1920x1080 Full HD, 24 fps.
+- Optional Telegram delivery for the manually rendered sample.
+- A GitHub Actions artifact containing the sample MP4 and production package.
 
-The core formula is: strong question + evidence + escalation + explanation + payoff.
+The sample is explicitly labelled as a design preview. It uses generated graphics and a basic open-source system voice, not live reporting, licensed news footage, or a finished daily news episode.
 
-## GitHub Actions
-The AI YouTube Studio workflow can be started manually with a story idea or run on a schedule. It produces a production-package artifact.
+## Run the first sample from Android
 
-This is the automation/control layer, not an unlimited-video service. Actual third-party media and publishing APIs require legitimate credentials and quotas.
+1. Open the repository's **Actions** tab.
+2. Select **AI YouTube Studio**.
+3. Tap **Run workflow**.
+4. Keep **Render the visual/audio sample MP4** enabled.
+5. Tap **Run workflow** again.
+6. Open the completed run and download the **news-studio-first-preview** artifact. It contains news-style-preview.mp4.
 
-## Quality rules
-- verify factual claims
-- do not invent evidence, quotes, experts or statistics
-- use original or properly licensed assets
-- avoid repetitive AI slideshow templates
-- human review before publishing
+If Telegram delivery is wanted, add these repository Actions secrets:
+- TELEGRAM_BOT_TOKEN
+- TELEGRAM_CHAT_ID
+
+The manual preview workflow sends the sample to Telegram when both secrets are present and the Telegram option is enabled. Never put bot credentials in source files.
+
+## Schedule
+
+The existing cron schedule is intentionally preserved: 30 4 * * 1,3,5 UTC, which is 10:00 AM India Standard Time on Monday, Wednesday, and Friday. This scheduled path still generates the existing production-package JSON; it does not send a fake preview as a news bulletin.
+
+## Important current limitation
+
+The existing studio.py and pipeline.py create production blueprints with placeholder narration and visual prompts. They do not yet research and verify daily news, create a complete finished episode, or render real news footage. The new MP4 is a renderer/design smoke test so the visual treatment, subtitle appearance, audio mix, and Telegram sample-delivery path can be inspected before connecting the renderer to verified story assets and production narration.
+
+Do not publish the sample as real news. Real episodes require verified sources, rights-cleared visuals, accurate scripts, and human review.
+
+## Quality and rights
+
+- Never invent claims, statistics, quotes, sources, or events.
+- Use original or properly licensed music, images, and footage.
+- Keep narration intelligible above music.
+- Use readable mobile-safe subtitles.
+- Do not use sensational visuals that misrepresent the story.
