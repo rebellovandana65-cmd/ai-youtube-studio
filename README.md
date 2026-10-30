@@ -9,7 +9,7 @@ This repository is being upgraded for an English-language news channel covering 
 - Burned-in, phrase-timed subtitles with high-contrast styling.
 - A newly synthesized, copyright-safe ambient music bed.
 - Voice/music sidechain ducking and final loudness normalization.
-- MP4 H.264/AAC export at 1280x720, 24 fps.
+- MP4 H.264/AAC export at 1920x1080 Full HD, 24 fps.
 - Optional Telegram delivery for the manually rendered sample.
 - A GitHub Actions artifact containing the sample MP4 and production package.
 
