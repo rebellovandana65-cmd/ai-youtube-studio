@@ -71,6 +71,7 @@ jobs:
         run: |
           test -s output/news-style-preview.mp4
           ffprobe -v error -show_entries stream=codec_name,width,height -show_entries format=duration -of json output/news-style-preview.mp4
+          ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 output/news-style-preview.mp4 | grep -qx '1920x1080'
       - name: Send sample video to Telegram
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.sample_video && inputs.send_preview_to_telegram }}
         env:
