@@ -138,11 +138,11 @@ def main() -> None:
         "Alignment=2,MarginV=185'"
     )
     filter_audio = (
-        "[1:a]volume=1.0[voice];"
+        "[1:a]asplit=2[voice_sc][voice_mix];"
         "[2:a]volume=1.0,afade=t=in:st=0:d=1.5,afade=t=out:st="
         f"{max(0.0, duration-2):.2f}:d=2[music];"
-        "[music][voice]sidechaincompress=threshold=0.025:ratio=8:attack=20:release=400[ducked];"
-        "[ducked][voice]amix=inputs=2:duration=longest:dropout_transition=2,"
+        "[music][voice_sc]sidechaincompress=threshold=0.025:ratio=8:attack=20:release=400[ducked];"
+        "[ducked][voice_mix]amix=inputs=2:duration=longest:dropout_transition=2,"
         "loudnorm=I=-16:TP=-1.5:LRA=11[aout]"
     )
     run([
