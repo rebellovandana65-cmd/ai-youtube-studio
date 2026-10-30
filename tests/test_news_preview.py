@@ -5,7 +5,7 @@ from scripts.render_news_preview import NARRATION, make_music
 
 def test_preview_narration_is_explicitly_a_design_preview():
     assert "production preview" in NARRATION.lower()
-    assert "verified sources" in NARRATION.lower()
+    assert "not a real news bulletin" in NARRATION.lower()
 
 
 def test_original_music_bed_is_valid_wav(tmp_path):
