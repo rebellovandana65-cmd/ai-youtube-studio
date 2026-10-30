@@ -1,49 +1,58 @@
-# AI YouTube Studio — News Video Upgrade
+# AI YouTube Studio — India + Global News Explainers
 
-This repository is being upgraded for an English-language news channel covering India and global stories.
+This project is being developed for an English-language news channel. The editorial goal is not to read headlines: every episode should explain **what happened, why it matters, who is affected, what the evidence says, and what happens next**.
 
-## What this upgrade adds
+## Current repository capability
 
-- A reproducible FFmpeg news-style sample renderer.
-- Animated editorial graphics, a headline treatment, lower-third and ticker.
-- Burned-in, phrase-timed subtitles with high-contrast styling.
-- A newly synthesized, copyright-safe ambient music bed.
-- Voice/music sidechain ducking and final loudness normalization.
-- MP4 H.264/AAC export at 1920x1080 Full HD, 24 fps.
-- Optional Telegram delivery for the manually rendered sample.
-- A GitHub Actions artifact containing the sample MP4 and production package.
+- Builds a structured news-explainer production package with title options, description template, story beats, Shorts angles, source requirements and editorial checks.
+- Renders a separate 18-second visual/audio design preview with FFmpeg.
+- Adds synchronised phrase captions, original generated background music and music ducking.
+- Can optionally send the design preview to Telegram when the required repository secrets are configured.
+- Runs automated tests and a sample-render smoke test in GitHub Actions.
 
-The sample is explicitly labelled as a design preview. It uses generated graphics and a basic open-source system voice, not live reporting, licensed news footage, or a finished daily news episode.
+**Important:** The current code does not yet fetch and verify live India/global news, write complete fact-checked narration, select real story-specific footage, or render a complete daily episode. The package is an editorial draft/structure, not publishable news copy. Do not publish the design preview as a real bulletin.
 
-## Run the first sample from Android
+## Format strategy
 
-1. Open the repository's **Actions** tab.
-2. Select **AI YouTube Studio**.
-3. Tap **Run workflow**.
-4. Keep **Render the visual/audio sample MP4** enabled.
-5. Tap **Run workflow** again.
-6. Open the completed run and download the **news-studio-first-preview** artifact. It contains news-style-preview.mp4.
+- **Main explainer:** 16:9 landscape, normally 6–10 minutes for a focused multi-story episode. Give each story enough time to explain its context; do not stretch thin stories to hit a duration.
+- **Shorts:** 9:16 vertical and no longer than 3 minutes. Make each Short a complete explanation of one story angle, not an arbitrary cut.
+- The uploaded sample reviewed during development is 1080×1920 and 3:02.3 long. It is vertical but exceeds YouTube's 3-minute Shorts limit, so it should be shortened below 3:00 or split. It is not the right master format for a landscape long-form episode.
 
-If Telegram delivery is wanted, add these repository Actions secrets:
-- TELEGRAM_BOT_TOKEN
-- TELEGRAM_CHAT_ID
+## Editorial workflow required before publishing
 
-The manual preview workflow sends the sample to Telegram when both secrets are present and the Telegram option is enabled. Never put bot credentials in source files.
+1. Collect current stories from reliable sources; prioritise primary sources and record source URLs, publisher, publication time and last-checked time.
+2. Confirm important claims with independent reporting where appropriate. Separate confirmed facts, estimates, allegations, analysis and unknowns.
+3. Write original narration that explains causes, context, impact and what happens next. Do not read article text or simply stitch headlines together.
+4. Create story-specific visuals: original charts, timelines, maps, labelled documents, and footage/images with documented commercial-use rights.
+5. Generate accurate searchable titles, a simple factual thumbnail, a useful description and chapter timestamps.
+6. Render narration, captions, restrained original/licensed music and story-specific visuals. Keep narration intelligible and music ducked under speech.
+7. Run automated checks for duration, resolution, missing audio, silence, clipping, caption coverage and black frames.
+8. Require human editorial approval before public release. Breaking news must not publish until the key facts are verified.
 
-## Schedule
+## Run from Android
 
-The existing cron schedule is intentionally preserved: 30 4 * * 1,3,5 UTC, which is 10:00 AM India Standard Time on Monday, Wednesday, and Friday. This scheduled path still generates the existing production-package JSON; it does not send a fake preview as a news bulletin.
+1. Open the repository's Actions tab.
+2. Select AI YouTube Studio.
+3. Tap Run workflow.
+4. For the current design sample, enable Render the visual/audio sample MP4.
+5. When the run finishes, open its artifacts and download the MP4/JSON.
+6. To send the sample to Telegram, configure TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID as repository Actions secrets and enable Telegram delivery.
 
-## Important current limitation
+Never put bot credentials in source files or share them in chat.
 
-The existing studio.py and pipeline.py create production blueprints with placeholder narration and visual prompts. They do not yet research and verify daily news, create a complete finished episode, or render real news footage. The new MP4 is a renderer/design smoke test so the visual treatment, subtitle appearance, audio mix, and Telegram sample-delivery path can be inspected before connecting the renderer to verified story assets and production narration.
+## Schedule and delivery
 
-Do not publish the sample as real news. Real episodes require verified sources, rights-cleared visuals, accurate scripts, and human review.
+The existing schedule is preserved: Monday, Wednesday and Friday at 10:00 AM IST. That scheduled path currently creates a production-package JSON; it is not yet a fully automated, verified daily news MP4. Telegram delivery for the current workflow is for the design sample only.
 
-## Quality and rights
+## Monetisation and rights
 
-- Never invent claims, statistics, quotes, sources, or events.
-- Use original or properly licensed music, images, and footage.
-- Keep narration intelligible above music.
-- Use readable mobile-safe subtitles.
-- Do not use sensational visuals that misrepresent the story.
+YouTube monetisation is not guaranteed by upload frequency, AI tools, titles or tags. The channel needs original, non-repetitive reporting and meaningful explanation, not generic slideshows or automated readings of news feeds. Every visual, clip, music track and sound effect must be cleared for the intended commercial use. Follow current YouTube Partner Program and advertiser-friendly policies.
+
+## Next engineering milestones
+
+1. Connect a reliable news-ingestion layer with source timestamps and deduplication.
+2. Add an optional script-generation provider that produces original explainers from source evidence, with citations and a strict no-invention rule.
+3. Build the landscape episode renderer and a separate vertical Short renderer.
+4. Add a story-specific visual asset pipeline and commercial-rights manifest.
+5. Connect the completed, QC-passed episode to Telegram at the existing scheduled delivery time.
+6. Add human approval before any public YouTube upload.
