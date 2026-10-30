@@ -114,28 +114,45 @@ def main() -> None:
     # Motion is generated in FFmpeg: animated accent bar, changing story cards,
     # lower-third, ticker, and burn-in subtitles. No external media required.
     vf = (
+        "drawbox=x=0:y=0:w=iw:h=ih:color=0x081426:t=fill,"
         "drawbox=x=0:y=0:w=iw:h=9:color=0xE11D48:t=fill,"
-        "drawbox=x=0:y=560:w=iw:h=160:color=0x07111F@0.94:t=fill,"
-        "drawbox=x='mod(t*260,iw)':y=0:w=260:h=9:color=0xFBBF24:t=fill,"
-        f"drawtext=fontfile={FONT}:text='NEWS DESK  /  GLOBAL + INDIA':"
+        "drawbox=x='mod(t*240,iw)':y=0:w=220:h=9:color=0xFBBF24:t=fill,"
+        "drawbox=x=760:y=115:w=450:h=365:color=0x10243B@0.96:t=fill,"
+        "drawbox=x=800:y=165:w=370:h=3:color=0xFBBF24:t=fill,"
+        "drawbox=x=800:y=280:w=320:h=14:color=0x29435E:t=fill,"
+        "drawbox=x=800:y=280:w='min(t*18,320)':h=14:color=0x38BDF8:t=fill,"
+        "drawbox=x=800:y=325:w=270:h=14:color=0x29435E:t=fill,"
+        "drawbox=x=800:y=325:w='min(max((t-3)*18,0),270)':h=14:color=0xFBBF24:t=fill,"
+        "drawbox=x=800:y=370:w=220:h=14:color=0x29435E:t=fill,"
+        "drawbox=x=800:y=370:w='min(max((t-6)*18,0),220)':h=14:color=0x34D399:t=fill,"
+        f"drawtext=fontfile={FONT}:text='NEWS DESK  /  INDIA + WORLD':"
         "x=72:y=72:fontsize=27:fontcolor=0xFBBF24,"
-        f"drawtext=fontfile={FONT}:text='THE STORY BEHIND THE HEADLINE':"
-        "x=72:y=210:fontsize=54:fontcolor=white:"
+        f"drawtext=fontfile={FONT}:text='THE STORY BEHIND':"
+        "x=72:y=210:fontsize=48:fontcolor=white:"
         "enable='between(t,0,8)',"
-        f"drawtext=fontfile={FONT}:text='CONTEXT. EVIDENCE. EXPLAINED.':"
-        "x=72:y=210:fontsize=54:fontcolor=white:"
+        f"drawtext=fontfile={FONT}:text='THE HEADLINE':"
+        "x=72:y=270:fontsize=48:fontcolor=white:"
+        "enable='between(t,0,8)',"
+        f"drawtext=fontfile={FONT}:text='CONTEXT. EVIDENCE.':"
+        "x=72:y=210:fontsize=46:fontcolor=white:"
         "enable='between(t,8,16)',"
-        f"drawtext=fontfile={FONT}:text='NO NOISE. JUST THE FACTS.':"
-        "x=72:y=210:fontsize=54:fontcolor=white:"
+        f"drawtext=fontfile={FONT}:text='EXPLAINED.':"
+        "x=72:y=270:fontsize=46:fontcolor=white:"
+        "enable='between(t,8,16)',"
+        f"drawtext=fontfile={FONT}:text='NO NOISE.':"
+        "x=72:y=210:fontsize=50:fontcolor=white:"
+        "enable='gte(t,16)',"
+        f"drawtext=fontfile={FONT}:text='JUST THE FACTS.':"
+        "x=72:y=270:fontsize=50:fontcolor=white:"
         "enable='gte(t,16)',"
         f"drawtext=fontfile={FONT}:text='SAMPLE DESIGN PREVIEW  |  NOT A REAL NEWS BULLETIN':"
         "x=72:y=590:fontsize=22:fontcolor=0xFBBF24,"
         f"drawtext=fontfile={FONT}:text='INDIA  •  WORLD  •  EXPLAINED':"
         "x=72:y=640:fontsize=25:fontcolor=white,"
         f"subtitles={captions.as_posix()}:force_style="
-        "'FontName=DejaVu Sans,FontSize=24,Bold=1,PrimaryColour=&H00FFFFFF,"
-        "OutlineColour=&H00101010,BorderStyle=1,Outline=2,Shadow=1,"
-        "Alignment=2,MarginV=185'"
+        "'FontName=DejaVu Sans,FontSize=22,Bold=1,PrimaryColour=&H00FFFFFF,"
+        "OutlineColour=&H00101010,BorderStyle=3,BackColour=&H9007111F,"
+        "Outline=1,Shadow=0,Alignment=2,MarginV=175'"
     )
     filter_audio = (
         "[1:a]asplit=2[voice_sc][voice_mix];"
@@ -147,7 +164,7 @@ def main() -> None:
     )
     run([
         "ffmpeg", "-y", "-f", "lavfi", "-i",
-        f"testsrc2=size=1280x720:rate=24:duration={duration:.2f}",
+        f"color=c=0x081426:s=1280x720:r=24:d={duration:.2f}",
         "-i", str(voice), "-i", str(music),
         "-filter_complex", f"[0:v]{vf}[vout];{filter_audio}",
         "-map", "[vout]", "-map", "[aout]",
